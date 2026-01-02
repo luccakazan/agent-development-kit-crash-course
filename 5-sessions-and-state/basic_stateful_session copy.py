@@ -9,22 +9,22 @@ from question_answering_agent import question_answering_agent
 load_dotenv()
 
 
-# Create session service to store state
+# Create a new session service to store state
 session_service_stateful = InMemorySessionService()
 
 initial_state = {
-    "user_name": "Lucca Kazan",
+    "user_name": "Brandon Hancock",
     "user_preferences": """
-        I like to play Padel, Surf, and eat.
-        My favorite food is Pargemiana.
-        My favorite TV show is Duna.
-        Loves it when people eat parmegiana with me.
+        I like to play Pickleball, Disc Golf, and Tennis.
+        My favorite food is Mexican.
+        My favorite TV show is Game of Thrones.
+        Loves it when people like and subscribe to his YouTube channel.
     """,
 }
 
-# Create a new session
-APP_NAME = "Lucca Bot"
-USER_ID = "Lucca_kazan"
+# Create a NEW session
+APP_NAME = "Brandon Bot"
+USER_ID = "brandon_hancock"
 SESSION_ID = str(uuid.uuid4())
 stateful_session = session_service_stateful.create_session(
     app_name=APP_NAME,
@@ -38,11 +38,11 @@ print(f"\tSession ID: {SESSION_ID}")
 runner = Runner(
     agent=question_answering_agent,
     app_name=APP_NAME,
-    session_service=session_service_stateful
+    session_service=session_service_stateful,
 )
 
 new_message = types.Content(
-    role="user", parts=[types.Part(text="What is Lucca's favorite TV show?")]
+    role="user", parts=[types.Part(text="What is Brandon's favorite TV show?")]
 )
 
 for event in runner.run(
@@ -54,12 +54,12 @@ for event in runner.run(
         if event.content and event.content.parts:
             print(f"Final Response: {event.content.parts[0].text}")
 
-print("=== Session Event Exploration ===")
+print("==== Session Event Exploration ====")
 session = session_service_stateful.get_session(
     app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
 )
 
-#Log final Session state
-print("=== Final Session State===")
+# Log final Session state
+print("=== Final Session State ===")
 for key, value in session.state.items():
     print(f"{key}: {value}")
